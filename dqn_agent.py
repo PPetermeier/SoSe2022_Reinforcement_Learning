@@ -3,6 +3,7 @@ import random
 from collections import deque
 import datetime
 
+import keras
 import tensorflow as tf
 import tensorflow.keras.backend as K
 from tensorflow.keras.layers import Dense, Input
@@ -48,6 +49,8 @@ class DQNAgent:
         state_input = Input(shape=(self.observation_dim))
         state_h1 = Dense(24, activation='relu')(state_input)
         state_h2 = Dense(48, activation='relu')(state_h1)
+
+        # TODO: Define input for output as product of two layers. Create second layer
         output = Dense(self.action_dim, activation='linear')(state_h2)
         model = Model(inputs=state_input, outputs=output)
         # loss function as Mean Squared Error with an adam optimizer with given learning rate

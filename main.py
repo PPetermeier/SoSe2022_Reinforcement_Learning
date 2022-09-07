@@ -1,19 +1,5 @@
-
-#------------- RL-related
-import gym
-
-
-#------------- Utilities
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-
-#------------- Assignement-specific
-from utilities import sarsa, windy
-
-
-
-
+from Assignment3 import RLrunner
 
 if __name__ == '__main__':
-    run()
+    runner = RLrunner()
+    runner.run_cartpole()
