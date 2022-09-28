@@ -9,13 +9,13 @@ from Assignment3 import RLrunner, Random_agent
 def run_training()-> None:
     """Bundles both training runs into one function.
     Training progress will be logged by tensorflow itself and can be accessed via tensorboard"""
-    runner = RLrunner
+    runner = RLrunner()
     runner.run_cartpole()
     runner.run_dueling_cartpole()
 
 def run_tests(number)-> None:
     """Bundles both tests into one function. Number is given to set amount of tests to run."""
-    runner = RLrunner
+    runner = RLrunner()
     runner.test(number)
     runner.test_dueling(number)
 
@@ -35,6 +35,7 @@ def visualize(episodecount)-> None:
     raw_data['Dueling'] = dueling[2]
     raw_data['Random'] = random_test
     raw_data = raw_data[['Episode', 'Random', 'Vanilla', 'Dueling']]
+    print(raw_data.describe())
     # Create the trend data from the raw data, take note that order is == as in raw_data
     trends = pd.DataFrame()
     trends['Episode'] = raw_data['Episode']
@@ -88,7 +89,8 @@ def visualize(episodecount)-> None:
     fig5.set_size_inches(30, 6)
     plot4 = sns.lineplot(data=advantage, x='Episode', y='Raw', color=palette[2])
     plot4.fill_between(advantage['Episode'], advantage['Raw'], color=palette[2])
+    plot4.set(ylabel='Reward Difference between Dueling & Vanilla')
     plt.show()
     # -------------
 if __name__ == '__main__':
-    visualize(300)
+    run_tests(1)

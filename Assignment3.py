@@ -43,7 +43,7 @@ class RLrunner():
 
     def test(self, number):
         self.agent = DQNAgent(self.env, self.config)
-        self.agent.test(self.env, '500.0_agent', number)
+        self.agent.test(env=self.env, name='./models/500.0_agent', number=number)
 
     def run_dueling_cartpole(self):
         # Our model to solve the mountain-car problem.
@@ -65,9 +65,9 @@ class RLrunner():
         self.env.close()
         return self.reward_log
 
-    def test_dueling(self):
+    def test_dueling(self, number):
         self.agent = Dueling_DQN_Agent(self.env, self.config)
-        self.agent.test(self.env, name='500.0_dueling_agent')
+        self.agent.test(self.env, name='./models/500.0_dueling_agent', number=number)
 
 class Random_agent():
     def __init__(self, test_episodes=100):

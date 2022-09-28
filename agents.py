@@ -187,9 +187,9 @@ class DQNAgent:
                     episodes_won += 1
                 cur_state = next_state
                 episode_reward += reward
-            print('EPISODE_REWARD', episode_reward)
+            print('VANILLA: EPISODE_REWARD', episode_reward)
             
-        print(episodes_won, 'EPISODES WON AMONG', TOTAL_EPISODES, 'EPISODES')
+        print('VANILLA: ', episodes_won, 'EPISODES WON AMONG', TOTAL_EPISODES, 'EPISODES')
 
 
 class Dueling_DQN_Agent:
@@ -287,7 +287,7 @@ class Dueling_DQN_Agent:
         if self.counterDQNTrained % self.updateTQNW == 0:
             self.targetmodel.set_weights(self.model.get_weights())
 
-    def train(self, env):
+    def train(self, env, name, number):
         ''' the actual training of the agent '''
         current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
         logdir = 'logs/' + current_time +"_dueling"
@@ -376,6 +376,6 @@ class Dueling_DQN_Agent:
                     episodes_won += 1
                 cur_state = next_state
                 episode_reward += reward
-            print('EPISODE_REWARD', episode_reward)
+            print('DUELING: EPISODE_REWARD', episode_reward)
 
-        print(episodes_won, 'EPISODES WON AMONG', TOTAL_EPISODES, 'EPISODES')
+        print('DUELING: ', episodes_won, 'EPISODES WON AMONG', TOTAL_EPISODES, 'EPISODES')
