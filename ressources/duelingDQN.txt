@@ -1,0 +1,10 @@
+Innovation einer neuronalen Netzarchitektur, die besser für modellfreie die besser für modellfreies RL geeignet ist
+Dieser Ansatz hat den Vorteil, dass das neue Netz leicht mit bestehenden und zukünftigen Algorithmen für RL kombiniert werden kann
+Entwickelt ein neues Netzwerk (Abbildung 1), verwendet aber bereits veröffentlichte Algorithmen.
+Trennt explizit die Darstellung von Zustandswerten und (zustandsabhängigen) Handlungsvorteilen
+
+
+
+Die vorgeschlagene Netzwerkarchitektur, die wir als du- Architektur nennen, trennt explizit die Darstellung von Zustandswerten und (zustandsabhängigen) Handlungsvorteilen. Die Duelling-Architektur besteht aus zwei Strömen, die die die die Wert- und Vorteilsfunktionen repräsentieren, während sie sich ein gemeinsames Faltungsmerkmal-Lernmodul teilen. Die beiden Ströme werden über eine spezielle Aggregationsschicht kombiniert, um eine eine Schätzung der Zustands-Aktions-Wertfunktion Q, wie in Abbildung 1. Dieses Duellingnetz ist zu verstehen als ein Q-Netz mit zwei Strömen zu verstehen, das das gängige Q-Netz mit einem Strom in bestehenden Algorithmen wie Deep Q-Networks (DQN; Mnih et al., 2015). Das Duelling Netzwerk erzeugt automatisch separate Schätzungen der Zustandswertfunktion und der Vorteilsfunktion, ohne dass eine zusätzliche Überwachung.
+
+Intuitiv kann die Duellingarchitektur lernen, welche Zustände wertvoll sind (oder nicht), ohne die Auswirkungen jeder Aktion für jeden Zustand zu lernen. Dies ist besonders nützlich in Zuständen, in denen ihre Aktionen die Umgebung nicht in relevanten Weise beeinflussen.
