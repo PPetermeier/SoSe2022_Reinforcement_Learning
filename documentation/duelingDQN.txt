@@ -1,10 +1,27 @@
-Innovation einer neuronalen Netzarchitektur, die besser für modellfreie die besser für modellfreies RL geeignet ist
-Dieser Ansatz hat den Vorteil, dass das neue Netz leicht mit bestehenden und zukünftigen Algorithmen für RL kombiniert werden kann
-Entwickelt ein neues Netzwerk (Abbildung 1), verwendet aber bereits veröffentlichte Algorithmen.
-Trennt explizit die Darstellung von Zustandswerten und (zustandsabhängigen) Handlungsvorteilen
+DQN:
+•	Q-Werte entsprechen einer Metrik, die angibt, wie gut eine Aktion für einen bestimmten Zustand ist -> Aktionswertfunktion
+•	Die Metrik ist nichts anderes als der erwartete Ertrag dieser Aktion für den jeweiligen Zustand
+•	Q-Werte können in der Tat in zwei Teile zerlegt werden: die Zustandswertfunktion V(s) und der Vorteilswert A(s, a):
+•	 Q(s, a)=V(s)+A(s, a)
+•	zwei Netze, um jeden Teil der Summe zu lernen, und dann fassen wir ihre Ergebnisse zusammen.
+•	Die Wertfunktion V(s) sagt uns, wie viel Belohnung wir im Zustand s erhalten werden
+•	Und die Vorteilsfunktion A(s, a) sagt uns, wie viel besser eine Aktion im Vergleich zu den anderen Aktionen ist
 
+Dueling:
+•	Weiterentwicklung des DQN
+•	Trennt explizit die Darstellung von Zustandswerten und (zustandsabhängigen) Handlungsvorteilen
+•	 -> Besteht aus zwei Strömen, die die die die Wert- und Vorteilsfunktionen repräsentieren, während sie sich ein gemeinsames Faltungsmerkmal-Lernmodul teilen
+•	 Die beiden Ströme werden über eine spezielle Aggregationsschicht kombiniert, um eine eine Schätzung der Zustands-Aktions-Wertfunktion Q
+•	Erzeugt automatisch ohne Überwachung separate Schätzungen der Zustandswertfunktion und der Vorteilsfunktion
+•	Lernen welche Zustände wertvoll sind (oder nicht), ohne die Auswirkungen jeder Aktion für jeden Zustand zu kennen  Besonders nützlich in Zuständen, in denen ihre Aktionen die Umgebung nicht in relevanten Weise beeinflussen.
+•	Mit jeder Aktualisierung der Q-Werte in der Dueling-Architektur, wird der Wertestrom V aktualisiert <-> Single-Stream-Architektur, bei der nur der Wert für eine der Aktionen aktualisiert wird, die Werte für alle anderen Aktionen bleiben unangetastet.
+•	Nicht einfach V+A, da Identifizierbarkeit (Von Q, kann nicht auf V&A geschlossen werden)
+•	mittlerer Vorteil als Baseline zu verwenden (den subtrahierten Term). Q=20 unendlich viele Möglichkeiten für V+a
 
-
-Die vorgeschlagene Netzwerkarchitektur, die wir als du- Architektur nennen, trennt explizit die Darstellung von Zustandswerten und (zustandsabhängigen) Handlungsvorteilen. Die Duelling-Architektur besteht aus zwei Strömen, die die die die Wert- und Vorteilsfunktionen repräsentieren, während sie sich ein gemeinsames Faltungsmerkmal-Lernmodul teilen. Die beiden Ströme werden über eine spezielle Aggregationsschicht kombiniert, um eine eine Schätzung der Zustands-Aktions-Wertfunktion Q, wie in Abbildung 1. Dieses Duellingnetz ist zu verstehen als ein Q-Netz mit zwei Strömen zu verstehen, das das gängige Q-Netz mit einem Strom in bestehenden Algorithmen wie Deep Q-Networks (DQN; Mnih et al., 2015). Das Duelling Netzwerk erzeugt automatisch separate Schätzungen der Zustandswertfunktion und der Vorteilsfunktion, ohne dass eine zusätzliche Überwachung.
-
-Intuitiv kann die Duellingarchitektur lernen, welche Zustände wertvoll sind (oder nicht), ohne die Auswirkungen jeder Aktion für jeden Zustand zu lernen. Dies ist besonders nützlich in Zuständen, in denen ihre Aktionen die Umgebung nicht in relevanten Weise beeinflussen.
+Vorteile:
+•	Vorteil, dass das neue Netz leicht mit bestehenden und zukünftigen Algorithmen für RL kombiniert werden kann
+•	Schneller die richtige Aktion während der Bewertung identifizieren kann, wenn redundante oder ähnliche Aktionen zu dem Lernproblem hinzugefügt werden.
+•	Der Vorteil der Duell-Architektur liegt zum Teil in ihrer Fähigkeit, die Zustandswertfunktion effizient zu erlernen. 
+•	Bei vielen Zuständen nicht notwendig ist, den Wert den Wert der einzelnen Handlungsoptionen zu schätzen. 
+•	Einschließlich besserer Wiedergabespeicher, bessere Explorationsstrategien, intrinsische Motivation (Größer je mehr Aktionen)
+•	führt zu dramatischen Verbesserungen gegenüber bestehenden Ansätzen für tiefe RL in der anspruchsvollen Atari-Domäne.
