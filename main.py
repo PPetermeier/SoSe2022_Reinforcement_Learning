@@ -11,7 +11,7 @@ def run_training()-> None:
     Training progress will be logged by tensorflow itself and can be accessed via tensorboard"""
     runner = RLrunner()
     runner.run_cartpole()
-    runner.run_duel_cartpole()
+    runner.run_dueling_cartpole()
 
 def run_tests(number)-> None:
     """Bundles both tests into one function. Number is given to set amount of tests to run."""
