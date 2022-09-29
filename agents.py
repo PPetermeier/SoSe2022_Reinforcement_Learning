@@ -176,15 +176,21 @@ class DQNAgent:
 
         for _ in range(TOTAL_EPISODES):
             episode_reward = 0
-            cur_state = env.reset()
+            cur_state = env.reset()[0]
             done = False
             episode_len = 0
             while not done:
                 env.render()
                 episode_len += 1
-                next_state, reward, done, _ = env.step(np.argmax(self.model.predict(np.expand_dims(cur_state, axis=0), verbose=0)))
-                if done and episode_len > 475:  # threshold for CartPole-v1
+                step = np.expand_dims(cur_state, axis=0)
+                step = np.asarray(step).astype(np.float32)
+                # print(env.step(np.argmax(self.model.predict(step, verbose=0))))
+                output = self.model.predict(step, verbose=0)
+                action = np.argmax(output)
+                next_state, reward, done, _, __ = env.step(action)
+                if episode_len > 475:  # threshold for CartPole-v1
                     episodes_won += 1
+                    break
                 cur_state = next_state
                 episode_reward += reward
             print('VANILLA: EPISODE_REWARD', episode_reward)
@@ -364,16 +370,22 @@ class Dueling_DQN_Agent:
 
         for _ in range(TOTAL_EPISODES):
             episode_reward = 0
-            cur_state = env.reset()
+            cur_state = env.reset()[0]
             done = False
             episode_len = 0
             while not done:
                 env.render()
                 episode_len += 1
-                next_state, reward, done, _ = env.step(
-                    np.argmax(self.model.predict(np.expand_dims(cur_state, axis=0), verbose=0)))
-                if done and episode_len > 475:  # threshold for CartPole-v1
+
+                step = np.expand_dims(cur_state, axis=0)
+                step = np.asarray(step).astype(np.float32)
+                output = self.model.predict(step, verbose=0)
+                action = np.argmax(output)
+
+                next_state, reward, done, _, __ = env.step(action)
+                if episode_len > 475:  # threshold for CartPole-v1
                     episodes_won += 1
+                    break
                 cur_state = next_state
                 episode_reward += reward
             print('DUELING: EPISODE_REWARD', episode_reward)
