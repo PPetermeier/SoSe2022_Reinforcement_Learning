@@ -11,7 +11,7 @@ def run_training()-> None:
     Training progress will be logged by tensorflow itself and can be accessed via tensorboard"""
     runner = RLrunner()
     runner.run_cartpole()
-    runner.run_dueling_cartpole()
+    runner.run_duel_cartpole()
 
 def run_tests(number)-> None:
     """Bundles both tests into one function. Number is given to set amount of tests to run."""
@@ -19,12 +19,13 @@ def run_tests(number)-> None:
     runner.test(number)
     runner.test_dueling(number)
 
-def visualize(episodecount)-> None:
+def visualize(episodecount=300)-> None:
     """Takes recorded datasets, aggregates them as needed and creates the plots for presentation
     Also runs the random agent the number of times given, which has to match with the number of episodes
     in the data for the visualization to make sense.
     All plots are already saved as .png, this is mainly for reproducibility.
-    Also note that this code just creates the plot from our main, successful run, not run1 and the 40 episodes one"""
+    Also note that this code just creates the plot from our main, successful run, not run1 and the 40 episodes one,
+    which would have to be load specifically by altering the docstring"""
     # Run random_agent to create data as needed
     random_agent = Random_agent(test_episodes=episodecount)
     random_test = random_agent.test()
@@ -35,8 +36,9 @@ def visualize(episodecount)-> None:
     raw_data['Dueling'] = dueling[2]
     raw_data['Random'] = random_test
     raw_data = raw_data[['Episode', 'Random', 'Vanilla', 'Dueling']]
+    # Print raw data description for snippet
     print(raw_data.describe())
-    # Create the trend data from the raw data, take note that order is == as in raw_data
+    # Create the trend data from the raw data, take note that order is == as in raw_data, also fill the NaNs at first steps
     trends = pd.DataFrame()
     trends['Episode'] = raw_data['Episode']
     trends['Random Trend'] = raw_data['Random'].rolling(10).sum()/10
@@ -66,22 +68,22 @@ def visualize(episodecount)-> None:
     plt.show()
     plt.clf()
     # -------------
-    fig3 = plt.gcf()
-    fig3.set_size_inches(20, 6)
+    fig2 = plt.gcf()
+    fig2.set_size_inches(20, 6)
     stripplot = sns.stripplot(data=df_melted, x='Reward', y='Type', size=3)
     plt.show()
     plt.clf()
     # -------------
-    fig4 = plt.gcf()
-    fig4.set_size_inches(20, 6)
+    fig3 = plt.gcf()
+    fig3.set_size_inches(20, 6)
     boxplot = sns.boxplot(data=df_melted, x='Reward', y='Type', )
     plt.show()
     plt.clf()
     # -------------
-    fig2 = plt.gcf()
-    fig2.set_size_inches(30, 6)
-    plot2 = sns.lineplot(data=trends_melted, x='Episode', y='Reward', hue='Type',)
-    plot2.set(ylabel='Average reward in a 10-Episode Window')
+    fig4 = plt.gcf()
+    fig4.set_size_inches(30, 6)
+    plot4 = sns.lineplot(data=trends_melted, x='Episode', y='Reward', hue='Type',)
+    plot4.set(ylabel='Average reward in a 10-Episode Window')
     plt.show()
     plt.clf()
     # -------------
@@ -93,4 +95,4 @@ def visualize(episodecount)-> None:
     plt.show()
     # -------------
 if __name__ == '__main__':
-    run_tests(1)
+    run_training()

@@ -13,9 +13,10 @@ from tensorflow.keras.optimizers import Adam
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 class DQNAgent:
-    def __init__(self, env, config):
-                
-        # used parameter within the agent
+    def __init__(self, env, config) -> None:
+        """
+        Takes parameters from config and the gym.env instance and creates a model for the agent with those parameters
+        """
         self.episodes = config['EPISODES']
 
         self.epsilon = config['EPSILON']
@@ -43,13 +44,15 @@ class DQNAgent:
         # counter for training steps used for updating the target network from time to time (defined in config)
         self.counterDQNTrained = 0
 
-    def create_model(self):
-        ''' DQN definition, from 2 inputs to 2 hidden layers with 24, 48 nodes with relu activation function. 
-        Output layer has 3 nodes with a linear activation function '''
+    def create_model(self) -> object:
+        """
+        DQN definition, from 2 inputs to 2 hidden layers with (originally (24, 48),
+        now (64,128) nodes with relu activation function.
+        Output layer has 3? (2?) nodes with a linear activation function
+        """
         state_input = Input(shape=(self.observation_dim))
         state_h1 = Dense(64, activation='relu')(state_input)
         state_h2 = Dense(128, activation='relu')(state_h1)
-
         # We had to add layers here!
         output = Dense(self.action_dim, activation='linear')(state_h2)
         model = Model(inputs=state_input, outputs=output)
@@ -57,21 +60,26 @@ class DQNAgent:
         model.compile(loss='mse', optimizer=Adam(learning_rate=self.learningRate))
         return model
 
-    def load_model(self, name):
-        ''' loads a model, that is, the weights of the DQN function approximator '''
-        self.model.load_weights(name+".h5")
+    def load_model(self, name) -> None:
+        """
+        loads a model, that is, the weights of the DQN function approximator
+        """
+        self.model.load_weights(name+'.h5')
         
-    def save_model(self, name):
-        ''' saves the weights of the DQN '''
-        self.model.save_weights(name+".h5")
+    def save_model(self, name) -> None:
+        """
+        saves the weights of the DQN
+        """
+        self.model.save_weights(name+'.h5')
     
-    def trainDQN(self):
+    def trainDQN(self) -> None:
+        
         self.counterDQNTrained += 1
         
         # minibatch handling for experience replay
         minibatch = random.sample(self.replay_memory, self.miniBatchSize)
-        X_cur_states = [] # s
-        X_next_states = [] # s'
+        X_cur_states = [] #s
+        X_next_states = [] #s'
         for index, sample in enumerate(minibatch):
             cur_state, action, reward, next_state, done = sample # s, a, r, s'
             X_cur_states.append(cur_state)
@@ -103,9 +111,12 @@ class DQNAgent:
         if self.counterDQNTrained % self.updateTQNW == 0:
             self.targetmodel.set_weights(self.model.get_weights())
 
-    def train(self, env):
-        ''' the actual training of the agent '''
-        current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    def train(self, env) -> None:
+        """
+        The actual training of the agent
+        Training data is logged by tensorflow utilities and models are saved into folder.
+        """
+        current_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         logdir = 'logs/'+ current_time
         summary_writer = tf.summary.create_file_writer(logdir)
 
@@ -138,8 +149,8 @@ class DQNAgent:
 
                 if done:
                     if (episode_reward > max_reward):
-                        self.save_model(str(episode_reward)+"_agent")
-           #    self.save_model("Episode_"+str(episode)+"_agent")
+                        self.save_model(str(episode_reward)+'_agent')
+           #    self.save_model('Episode_'+str(episode)+'_agent')
                 # Add experience to replay memory buffer
                 self.replay_memory.append((cur_state, action, reward, next_state, done))
                 cur_state = next_state
@@ -164,8 +175,11 @@ class DQNAgent:
                 tf.summary.scalar('Timesteps per episode', episode_length, step=episode)
                 tf.summary.scalar('Avg score over 100 episode', np.mean(scores_deque), step=episode)
 
-    def test(self, env, name, number):
-        ''' load the weights of the DQN and perform 10 steps in the environment '''
+    def test(self, env, name, number) -> None:
+        """
+        load the weights of the DQN and perform 10 steps in the environment
+        Output is given as rendering and print-outs.
+        """
         # create and load weights of the model
         self.load_model(name)
 
@@ -199,7 +213,10 @@ class DQNAgent:
 
 
 class Dueling_DQN_Agent:
-    def __init__(self, env, config):
+    """
+    Takes parameters from config and the gym.env instance and creates a model for the agent with those parameters
+    """
+    def __init__(self, env, config) -> None:
 
         # used parameter within the agent
         self.episodes = config['EPISODES']
@@ -229,9 +246,12 @@ class Dueling_DQN_Agent:
         # counter for training steps used for updating the target network from time to time (defined in config)
         self.counterDQNTrained = 0
 
-    def create_model(self):
-        ''' DQN definition, from 2 inputs to 2 hidden layers with 24, 48 nodes with relu activation function.
-        Output layer has 3 nodes with a linear activation function '''
+    def create_model(self) -> object:
+        """ 
+        Dueling DQN definition, from 2 inputs to 2 hidden layers with (originally (24, 48),
+        now (64,128), nodes with relu activation function.
+        Output layer has 3 nodes with a linear activation function
+        """
         state_input = Input(shape=(self.observation_dim))
         state_h1 = Dense(64, activation='relu')(state_input)
         state_h2 = Dense(128, activation='relu')(state_h1)
@@ -247,15 +267,19 @@ class Dueling_DQN_Agent:
         model.compile(loss='mse', optimizer=Adam(learning_rate=self.learningRate))
         return model
 
-    def load_model(self, name):
-        ''' loads a model, that is, the weights of the DQN function approximator '''
-        self.model.load_weights(name + ".h5")
+    def load_model(self, name) -> None:
+        """
+        loads a model, that is, the weights of the DQN function approximator
+        """
+        self.model.load_weights(name + '.h5')
 
-    def save_model(self, name):
-        ''' saves the weights of the DQN '''
-        self.model.save_weights(name + ".h5")
+    def save_model(self, name) -> None:
+        """
+        saves the weights of the dueling DQN
+        """
+        self.model.save_weights(name + '.h5')
 
-    def trainDQN(self):
+    def trainDQN(self) -> None:
         self.counterDQNTrained += 1
 
         # minibatch handling for experience replay
@@ -293,10 +317,13 @@ class Dueling_DQN_Agent:
         if self.counterDQNTrained % self.updateTQNW == 0:
             self.targetmodel.set_weights(self.model.get_weights())
 
-    def train(self, env, name, number):
-        ''' the actual training of the agent '''
-        current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        logdir = 'logs/' + current_time +"_dueling"
+    def train(self, env) -> None:
+        """
+        the actual training of the agent.
+        Training data is logged by tensorflow utilities and models are saved annotated as dueling into folder.
+        """
+        current_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        logdir = 'logs/' + current_time +'_dueling'
         summary_writer = tf.summary.create_file_writer(logdir)
 
         # for data gathering
@@ -328,10 +355,10 @@ class Dueling_DQN_Agent:
                 # Added:
                 if done:
                     if (episode_reward > max_reward):
-                        self.save_model(str(episode_reward) + "_dueling_agent")
+                        self.save_model(str(episode_reward) + '_dueling_agent')
 
                     # elif (episode % 50 == 0):
-                    #    self.save_model("Episode_"+str(episode)+"_agent")
+                    #    self.save_model('Episode_'+str(episode)+'_agent')
                 # Add experience to replay memory buffer
                 self.replay_memory.append((cur_state, action, reward, next_state, done))
                 cur_state = next_state
@@ -355,11 +382,12 @@ class Dueling_DQN_Agent:
                 tf.summary.scalar('epsilon', self.epsilon, step=episode)
                 tf.summary.scalar('Timesteps per episode', episode_length, step=episode)
                 tf.summary.scalar('Avg score over 100 episode', np.mean(scores_deque), step=episode)
-        self.reward_log.append(episode_reward)
-        return self.reward_log
 
-    def test(self, env, name, number):
-        ''' load the weights of the DQN and perform 10 steps in the environment '''
+    def test(self, env, name, number) -> None:
+        """
+        Loads the weights of the DQN and performs number steps in the environment
+        Output is given as rendering and print-outs.
+        """
         # create and load weights of the model
         self.load_model(name)
 
