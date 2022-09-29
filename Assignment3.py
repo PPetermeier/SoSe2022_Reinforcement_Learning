@@ -34,7 +34,7 @@ class RLrunner():
         Creates a vanilla DQN agent with given config and trains it with given parameters.
         """
         self.agent = DQNAgent(self.env, self.config)
-        self.agent.train(self.env) # TODO: Ich glaub das ist redundand. Testen!
+        self.agent.train(self.env)
 
         for step in range(self.num_steps):
             action = self.env.action_space.sample()
