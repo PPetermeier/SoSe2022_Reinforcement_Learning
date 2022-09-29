@@ -11,7 +11,7 @@ To install all requirements,open your terminal in this repository,  create a new
 After that, activate the environment as the default interpreter for this main and everything should be able to run,
 at least in terms of dependencies and such.
 
-#Orientation with table of contents:
+# Orientation with table of contents:
 
 * This repository contains the results of our assignment, Nr.3: Dueling  DQN.
 * The whole list of assignments can be consulted in the documentation directory, as well the explanatory paper for Dueling DQN
@@ -20,7 +20,7 @@ at least in terms of dependencies and such.
 * The other two methods of main are a bundling of tests for both models which are saved as .h5 data in the 'models'directory,
 as well as the train method which trains both models again with the parameters configured in Assignment3.py.
 
-#Programming
+# Programming
 
 The dueling DQN was implemented as a copy of the vanilla-agent which was given to us by defining three instead of 1 layer
 for calculating the q-value: 
@@ -33,5 +33,4 @@ functions and optimized by the adam algorithm with the metric of mean square err
 The other hyperparameter concerning the reinforcement agent training itself were manually explored. The configuration 
 with which the main data presented was gained is still saved as strings in the configuration dictionary of the RLRunner 
 in Assignment3.py
-The other parts of training were not altered, as we did not complete the bonus task given in our assignment. 
-
+The other parts of training were not altered, as we did not complete the bonus task given in our assignment.
