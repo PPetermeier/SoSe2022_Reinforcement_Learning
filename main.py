@@ -93,4 +93,4 @@ def visualize(episodecount)-> None:
     plt.show()
     # -------------
 if __name__ == '__main__':
-    run_tests(1)
+    run_tests(2)

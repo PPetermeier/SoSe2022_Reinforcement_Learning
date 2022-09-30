@@ -188,7 +188,7 @@ class DQNAgent:
                 output = self.model.predict(step, verbose=0)
                 action = np.argmax(output)
                 next_state, reward, done, _, __ = env.step(action)
-                if episode_len > 475:  # threshold for CartPole-v1
+                if episode_len > 500:  # threshold for CartPole-v1
                     episodes_won += 1
                     break
                 cur_state = next_state
@@ -383,7 +383,7 @@ class Dueling_DQN_Agent:
                 action = np.argmax(output)
 
                 next_state, reward, done, _, __ = env.step(action)
-                if episode_len > 475:  # threshold for CartPole-v1
+                if episode_len > 500:  # threshold for CartPole-v1
                     episodes_won += 1
                     break
                 cur_state = next_state
